@@ -89,11 +89,23 @@ async def consultar_tarifas(
             nome: [asdict(linha) for linha in linhas]
             for nome, linhas in resultado.grupos.items()
         },
-        "fio_b": {
-            "base_kwh_sem_tributos": resultado.fio_b_base_kwh,
-            "resolucao": resultado.fio_b_resolucao,
-            "anos": [asdict(a) for a in resultado.fio_b_anos],
-        }
-        if resultado.fio_b_base_kwh is not None
-        else None,
+        "fio_b": (
+            {
+                "base_kwh_sem_tributos": resultado.fio_b_base_kwh,
+                "resolucao": resultado.fio_b_resolucao,
+                "anos": [asdict(a) for a in resultado.fio_b_anos],
+            }
+            if resultado.fio_b_base_kwh is not None
+            else (
+                {
+                    "disponivel": False,
+                    "motivo": (
+                        f"Fio B ainda não publicado pela ANEEL para {distribuidora}. "
+                        "Disponível após homologação anual da revisão tarifária."
+                    ),
+                }
+                if "Fio B" in grupos_lista
+                else None
+            )
+        ),
     }

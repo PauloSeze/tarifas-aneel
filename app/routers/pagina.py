@@ -82,11 +82,17 @@ async def consultar(
         ano_solicitado=None,
     )
 
+    pediu_fio_b = "Fio B" in grupos_normalizados
+    fio_b_indisponivel = pediu_fio_b and resultado.fio_b_base_kwh is None
+
     return templates.TemplateResponse(
         "resultado.html",
         {
             "request": request,
             "resultado": resultado,
             "tributos": tributos,
+            "distribuidora": distribuidora,
+            "pediu_fio_b": pediu_fio_b,
+            "fio_b_indisponivel": fio_b_indisponivel,
         },
     )

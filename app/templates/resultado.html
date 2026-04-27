@@ -152,6 +152,22 @@
   }
   .mw-fiob__card.atual .mw-fiob__valor { color: var(--mw-red-500); }
 
+  .mw-fiob__alert {
+    background: var(--mw-warning-bg);
+    border-left: 3px solid var(--mw-warning);
+    padding: var(--space-3) var(--space-4);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: var(--lh-normal);
+  }
+  .mw-fiob__alert strong {
+    display: block;
+    color: var(--mw-orange-700);
+    margin-bottom: var(--space-1);
+  }
+
   .mw-tributos {
     margin-top: var(--space-8);
     padding-top: var(--space-4);
@@ -322,6 +338,17 @@
       {% endif %}
     </div>
   {% endfor %}
+
+  {% if fio_b_indisponivel %}
+    <div class="mw-fiob mw-fiob--indisponivel">
+      <h2 class="mw-grupo__title">Fio B — B1 Convencional</h2>
+      <div class="mw-fiob__alert">
+        <strong>Fio B ainda não publicado pela ANEEL para {{ distribuidora }}.</strong>
+        O CSV de componentes tarifárias da concessionária só é populado após a homologação anual da revisão tarifária.
+        Verifique novamente após o próximo ciclo da ANEEL para esta distribuidora.
+      </div>
+    </div>
+  {% endif %}
 
   {% if resultado.fio_b_base_kwh is not none %}
     <div class="mw-fiob">
