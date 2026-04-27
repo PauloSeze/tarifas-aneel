@@ -138,7 +138,7 @@
       <select class="mw-select" name="distribuidora">
         {% for sigla, info in distribuidoras.items() %}
           <option value="{{ sigla }}" {% if sigla == "EMT" %}selected{% endif %}>
-            {{ info.nome }} ({{ sigla }} · {{ info.uf }})
+            {{ info.nome }} ({{ sigla }})
           </option>
         {% endfor %}
       </select>
