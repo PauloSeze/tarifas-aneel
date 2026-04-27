@@ -69,6 +69,11 @@
       padding: var(--space-8) var(--space-6);
     }
 
+    /* mobile: reserva espaço no rodape pro FAB do café não cobrir o crédito */
+    @media (max-width: 540px) {
+      .mw-footer { padding-bottom: 96px; }
+    }
+
     .mw-footer__inner {
       max-width: var(--container-lg);
       margin: 0 auto;
@@ -174,11 +179,13 @@
     }
     @media (max-width: 540px) {
       .mw-coffee {
-        bottom: 16px;
-        right: 16px;
-        padding: 12px 18px;
-        font-size: 13px;
+        bottom: 14px;
+        right: 14px;
+        padding: 10px 16px;
+        font-size: 12px;
+        gap: 8px;
       }
+      .mw-coffee svg { width: 16px; height: 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .mw-coffee,
