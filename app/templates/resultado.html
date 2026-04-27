@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}{{ resultado.distribuidora }} {{ resultado.ano_vigencia or '' }} — Tarifas ANEEL{% endblock %}
+
+{% block extra_head %}
+<style>
+  .result-header {
+    background: #1a365d;
+    color: #fff;
+    padding: 20px 24px;
+    border-radius: 10px 10px 0 0;
+  }
+  .result-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 600; }
+  .result-header .sub { font-size: 12px; opacity: 0.85; }
+  .result-body {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 24px;
+  }
+  .grupo { margin-bottom: 28px; }
+  .grupo:last-child { margin-bottom: 0; }
+  .grupo-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid #e2e8f0; }
+  th:first-child, td:first-child { text-align: left; }
+  th {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tr:hover td { background: #f7fafc; }
+  .valor { font-family: 'SF Mono', Consolas, monospace; font-size: 13px; }
+  .relacao-te {
+    background: #f0f4f8;
+    border-left: 3px solid #3182ce;
+    padding: 10px 14px;
+    margin-top: 8px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+  }
+  .relacao-te strong { color: #2b6cb0; }
+  .fiob-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+  .fiob-base { font-size: 13px; color: #4a5568; margin-bottom: 12px; }
+  .fiob-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .fiob-card {
+    background: #f7fafc;
+    border-radius: 6px;
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid transparent;
+  }
+  .fiob-card.atual {
+    background: #ebf8ff;
+    border-color: #3182ce;
+  }
+  .fiob-ano { font-size: 12px; color: #718096; }
+  .fiob-percent { font-size: 11px; color: #a0aec0; }
+  .fiob-valor {
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-top: 4px;
+  }
+  .fiob-card.atual .fiob-valor { color: #2b6cb0; }
+  .footer {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 11px;
+    color: #718096;
+  }
+  .footer a { color: #3182ce; text-decoration: none; }
+  @media (max-width: 640px) {
+    .fiob-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="result-header">
+  <h2>Tarifas {{ resultado.distribuidora }}{% if resultado.ano_vigencia %} · {{ resultado.ano_vigencia }}{% endif %}</h2>
+  <div class="sub">
+    {% if resultado.resolucao_tarifas %}{{ resultado.resolucao_tarifas }} · {% endif %}
+    Consulta em {{ resultado.consultado_em }}
+  </div>
+</div>
+
+<div class="result-body">
+
+  {% for nome, items in resultado.grupos.items() %}
+    {% set is_b1 = nome.startswith("B1") %}
+    {% set is_a4_az_vd = nome == "A4 - Azul" or nome == "A4 - Verde" %}
+    {% set demandas = items | selectattr('tipo', 'equalto', 'Demanda') | list %}
+    {% set consumos = items | selectattr('tipo', 'equalto', 'Consumo') | list %}
+
+    <div class="grupo">
+      <h3 class="grupo-title">{{ nome }}</h3>
+
+      {% if is_b1 %}
+        <table>
+          <thead>
+            <tr><th>Descrição</th><th>R$/kWh</th></tr>
+          </thead>
+          <tbody>
+            {% for item in consumos %}
+              <tr>
+                <td>{% if item.posto == "Não se aplica" %}Consumo{% else %}Consumo {{ item.posto }}{% endif %}</td>
+                <td class="valor">{{ item.valor_kwh | br }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% elif is_a4_az_vd %}
+        {% if demandas %}
+          <table>
+            <thead>
+              <tr>
+                <th>Demanda</th>
+                <th>Ultrapassagem</th>
+                <th>Não Consumida</th>
+                <th>R$/kW</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in demandas %}
+                <tr>
+                  <td>{{ item.posto }}</td>
+                  <td class="valor">{{ (item.valor_kwh * 2) | br }}</td>
+                  <td class="valor">{{ item.valor_sem_icms | br }}</td>
+                  <td class="valor">{{ item.valor_kwh | br }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+
+        {% if consumos %}
+          <table>
+            <thead>
+              <tr>
+                <th>Consumo</th>
+                <th>TUSD</th>
+                <th>TE</th>
+                <th>R$/kWh</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in consumos %}
+                <tr>
+                  <td>{% if item.posto == "Não se aplica" %}Único{% elif item.posto == "Fora ponta" %}Fora Ponta{% else %}{{ item.posto }}{% endif %}</td>
+                  <td class="valor">{{ item.tusd | br }}</td>
+                  <td class="valor">{{ item.te | br }}</td>
+                  <td class="valor">{{ item.valor_kwh | br }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% set ponta = consumos | selectattr('posto_original', 'equalto', 'Ponta') | first %}
+          {% set fora = consumos | selectattr('posto_original', 'equalto', 'Fora ponta') | first %}
+          {% if ponta and fora and fora.te > 0 %}
+            <div class="relacao-te">
+              Relação TE: Ponta é <strong>{{ '%.2f'|format(ponta.te / fora.te) }}x</strong> maior que Fora Ponta
+            </div>
+          {% endif %}
+        {% endif %}
+
+      {% else %}
+        {# A4 - Geração e fallback #}
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Ultrapassagem</th>
+              <th>Não Consumida</th>
+              <th>R$/kW</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in demandas %}
+              <tr>
+                <td>{{ item.posto }}</td>
+                <td class="valor">{{ (item.valor_kwh * 2) | br }}</td>
+                <td class="valor">{{ item.valor_sem_icms | br }}</td>
+                <td class="valor">{{ item.valor_kwh | br }}</td>
+              </tr>
+            {% endfor %}
+            {% for item in consumos %}
+              <tr>
+                <td>{% if item.posto == "Não se aplica" %}Consumo{% else %}Consumo {{ item.posto }}{% endif %}</td>
+                <td colspan="3" class="valor">{{ item.valor_kwh | br }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if resultado.fio_b_base_kwh is not none %}
+    <div class="fiob-section">
+      <h3 class="grupo-title">Fio B — B1 Convencional</h3>
+      <div class="fiob-base">
+        Tarifa cheia: <strong>{{ resultado.fio_b_base_kwh | br }}</strong> R$/kWh (sem tributos)
+        {% if resultado.fio_b_resolucao %}<br><span style="color:#a0aec0;">{{ resultado.fio_b_resolucao }}</span>{% endif %}
+      </div>
+      <div class="fiob-grid">
+        {% for c in resultado.fio_b_anos %}
+          <div class="fiob-card{% if c.atual %} atual{% endif %}">
+            <div class="fiob-ano">{{ c.ano }}</div>
+            <div class="fiob-percent">{{ '%.0f'|format(c.percentual * 100) }}%</div>
+            <div class="fiob-valor">{{ c.valor_kwh | br }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="footer">
+    Tributos aplicados:
+    PIS {{ '%.4f'|format(tributos.pis * 100) }}% ·
+    COFINS {{ '%.4f'|format(tributos.cofins * 100) }}% ·
+    ICMS {{ '%.2f'|format(tributos.icms * 100) }}%
+    · Fonte: <a href="https://dadosabertos.aneel.gov.br" target="_blank" rel="noopener">ANEEL</a>
+  </div>
+</div>
+{% endblock %}
