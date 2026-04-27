@@ -29,6 +29,9 @@ RESOURCE_TARIFAS = "fcf2906c-7c32-4b9b-a637-054e7a5234f4"
 # IDs descobertos dinamicamente via package_show; mapa abaixo é fallback offline.
 PACKAGE_COMPONENTES = "componentes-tarifarias"
 RESOURCE_COMPONENTES_FALLBACK: dict[int, str] = {
+    2021: "9e40e8a7-664f-4dab-a868-e5781fcf604b",
+    2022: "ab0f6630-9e5d-41a1-8097-343bf09d7c16",
+    2023: "8bfa100a-fd79-4daf-8fab-8b14d02fd08a",
     2024: "70ac08d1-53fc-4ceb-9c22-3a3a2c70e9fa",
     2025: "a4060165-3a0c-404f-926c-83901088b67c",
     2026: "e8717aa8-2521-453f-bf16-fbb9a16eea39",
@@ -187,20 +190,27 @@ async def buscar_tarifas(
         return [await _consultar(client, RESOURCE_TARIFAS, f) for f in filters_list]
 
 
+FIO_B_FALLBACK_ANOS = 5  # tenta ano corrente + 5 anteriores
+
+
 async def buscar_fio_b(
     filters: dict[str, str], ano: int | None = None
 ) -> list[dict[str, Any]]:
     """
-    Tenta o ano solicitado primeiro; se vazio, recua ano a ano até achar dados
-    (até 3 anos). Resolve o caso 'ano corrente ainda não publicado' e o caso
-    'resource do ano antigo limpou registros'.
+    Tenta o ano solicitado primeiro; se vazio, recua ano a ano até achar dados.
+    Cobre dois cenários:
+    - ano corrente ainda não publicado pra essa distribuidora
+    - CSVs de anos intermediários zerados pela ANEEL (acontece com 2024/2025)
     """
     from datetime import datetime
 
     inicio = ano or datetime.now().year
     async with _client() as client:
-        for tentativa_ano in (inicio, inicio - 1, inicio - 2):
-            resource_id = await descobrir_resource_componentes(tentativa_ano)
+        for tentativa_ano in range(inicio, inicio - FIO_B_FALLBACK_ANOS - 1, -1):
+            try:
+                resource_id = await descobrir_resource_componentes(tentativa_ano)
+            except AneelError:
+                continue
             registros = await _consultar(client, resource_id, filters)
             if registros:
                 return registros
@@ -234,9 +244,12 @@ async def buscar_tudo(
 async def _buscar_fio_b_com_fallback(
     client: httpx.AsyncClient, filters: dict[str, str], ano_inicio: int
 ) -> list[dict[str, Any]]:
-    """Tenta o ano e dois anos anteriores até achar registros."""
-    for tentativa in (ano_inicio, ano_inicio - 1, ano_inicio - 2):
-        resource_id = await descobrir_resource_componentes(tentativa)
+    """Tenta do ano corrente até FIO_B_FALLBACK_ANOS atrás."""
+    for tentativa in range(ano_inicio, ano_inicio - FIO_B_FALLBACK_ANOS - 1, -1):
+        try:
+            resource_id = await descobrir_resource_componentes(tentativa)
+        except AneelError:
+            continue
         registros = await _consultar(client, resource_id, filters)
         if registros:
             return registros
