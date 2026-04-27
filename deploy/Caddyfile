@@ -1,0 +1,17 @@
+# Caddy: reverse proxy + SSL automatico via Let's Encrypt
+# Adicionar novos sites = mais 3 linhas + reload (caddy reload)
+
+{
+    email midwestengenharia@gmail.com
+    # admin off  # descomentar pra desabilitar API admin do Caddy
+}
+
+tarifas.midwestengenharia.com.br {
+    encode zstd gzip
+    reverse_proxy tarifas-aneel:8000
+
+    log {
+        output stdout
+        format console
+    }
+}
