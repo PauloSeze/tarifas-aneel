@@ -143,15 +143,35 @@
       text-decoration: none;
       box-shadow: var(--shadow-glow-orange);
       transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), filter 200ms;
-      animation: mw-coffee-pulse 3s var(--ease-in-out) infinite;
+      animation: mw-coffee-bounce 1.6s var(--ease-in-out) infinite;
+      isolation: isolate;
+    }
+    /* anel pulsante (ripple) — 2 camadas pra criar onda contínua */
+    .mw-coffee::before,
+    .mw-coffee::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: var(--mw-gradient);
+      z-index: -1;
+      pointer-events: none;
+      animation: mw-coffee-ring 2s var(--ease-out) infinite;
+    }
+    .mw-coffee::after {
+      animation-delay: 1s;
     }
     .mw-coffee:hover {
-      transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 14px 32px rgba(241, 138, 38, 0.42);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 16px 38px rgba(229, 54, 21, 0.5);
       filter: brightness(1.05);
       animation-play-state: paused;
     }
-    .mw-coffee:active { transform: translateY(-1px) scale(1.01); }
+    .mw-coffee:hover::before,
+    .mw-coffee:hover::after {
+      animation-play-state: paused;
+    }
+    .mw-coffee:active { transform: translateY(-1px) scale(1.02); }
     .mw-coffee:focus-visible {
       outline: 2px solid #fff;
       outline-offset: 3px;
@@ -160,10 +180,23 @@
       width: 18px;
       height: 18px;
       flex-shrink: 0;
+      animation: mw-coffee-shake 1.6s var(--ease-in-out) infinite;
     }
-    @keyframes mw-coffee-pulse {
-      0%, 100% { box-shadow: 0 8px 24px rgba(241, 138, 38, 0.28); }
-      50% { box-shadow: 0 12px 30px rgba(229, 54, 21, 0.45); }
+    /* salto vertical sutil */
+    @keyframes mw-coffee-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    /* xícara tremendo de leve (vapor saindo) */
+    @keyframes mw-coffee-shake {
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(6deg); }
+    }
+    /* ondas que se expandem do botão */
+    @keyframes mw-coffee-ring {
+      0% { transform: scale(1); opacity: 0.55; }
+      80% { opacity: 0; }
+      100% { transform: scale(1.5); opacity: 0; }
     }
     @media (max-width: 540px) {
       .mw-coffee {
@@ -174,7 +207,10 @@
       }
     }
     @media (prefers-reduced-motion: reduce) {
-      .mw-coffee { animation: none; }
+      .mw-coffee,
+      .mw-coffee::before,
+      .mw-coffee::after,
+      .mw-coffee svg { animation: none; }
     }
   </style>
   {% block extra_head %}{% endblock %}
