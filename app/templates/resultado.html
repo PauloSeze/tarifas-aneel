@@ -48,7 +48,12 @@
     border-bottom: 2px solid var(--mw-orange-100);
   }
 
-  table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-3); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-3);
+    table-layout: fixed;
+  }
   th, td {
     padding: var(--space-3);
     text-align: right;
@@ -197,6 +202,10 @@
 
       {% if is_b1 %}
         <table>
+          <colgroup>
+            <col style="width: 40%">
+            <col style="width: 60%">
+          </colgroup>
           <thead>
             <tr><th>Descrição</th><th>R$/kWh</th></tr>
           </thead>
@@ -213,6 +222,12 @@
       {% elif is_a4_az_vd %}
         {% if demandas %}
           <table>
+            <colgroup>
+              <col style="width: 28%">
+              <col style="width: 24%">
+              <col style="width: 24%">
+              <col style="width: 24%">
+            </colgroup>
             <thead>
               <tr>
                 <th>Demanda</th>
@@ -236,6 +251,12 @@
 
         {% if consumos %}
           <table>
+            <colgroup>
+              <col style="width: 28%">
+              <col style="width: 24%">
+              <col style="width: 24%">
+              <col style="width: 24%">
+            </colgroup>
             <thead>
               <tr>
                 <th>Consumo</th>
@@ -267,6 +288,12 @@
 
       {% else %}
         <table>
+          <colgroup>
+            <col style="width: 28%">
+            <col style="width: 24%">
+            <col style="width: 24%">
+            <col style="width: 24%">
+          </colgroup>
           <thead>
             <tr>
               <th>Descrição</th>
