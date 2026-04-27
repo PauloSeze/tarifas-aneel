@@ -123,6 +123,59 @@
       .mw-topbar { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
       .mw-topbar__title { border-left: 0; padding-left: 0; }
     }
+
+    /* ---------- Botão flutuante "café pro Zé" ---------- */
+    .mw-coffee {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      background: var(--mw-gradient);
+      color: #fff;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      box-shadow: var(--shadow-glow-orange);
+      transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), filter 200ms;
+      animation: mw-coffee-pulse 3s var(--ease-in-out) infinite;
+    }
+    .mw-coffee:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 32px rgba(241, 138, 38, 0.42);
+      filter: brightness(1.05);
+      animation-play-state: paused;
+    }
+    .mw-coffee:active { transform: translateY(-1px) scale(1.01); }
+    .mw-coffee:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+    .mw-coffee svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    @keyframes mw-coffee-pulse {
+      0%, 100% { box-shadow: 0 8px 24px rgba(241, 138, 38, 0.28); }
+      50% { box-shadow: 0 12px 30px rgba(229, 54, 21, 0.45); }
+    }
+    @media (max-width: 540px) {
+      .mw-coffee {
+        bottom: 16px;
+        right: 16px;
+        padding: 12px 18px;
+        font-size: 13px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mw-coffee { animation: none; }
+    }
   </style>
   {% block extra_head %}{% endblock %}
 </head>
@@ -156,5 +209,21 @@
       </p>
     </div>
   </footer>
+
+  <a class="mw-coffee"
+     href="https://pay.cakto.com.br/3ex3dyi_864652"
+     target="_blank"
+     rel="noopener"
+     aria-label="Me paga um café aí, Zé?">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/>
+      <line x1="6" y1="2" x2="6" y2="4"/>
+      <line x1="10" y1="2" x2="10" y2="4"/>
+      <line x1="14" y1="2" x2="14" y2="4"/>
+    </svg>
+    Me paga um café aí, Zé?
+  </a>
 </body>
 </html>
