@@ -144,31 +144,11 @@
       box-shadow: var(--shadow-glow-orange);
       transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), filter 200ms;
       animation: mw-coffee-bounce 1.6s var(--ease-in-out) infinite;
-      isolation: isolate;
-    }
-    /* anel pulsante (ripple) — 2 camadas pra criar onda contínua */
-    .mw-coffee::before,
-    .mw-coffee::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 999px;
-      background: var(--mw-gradient);
-      z-index: -1;
-      pointer-events: none;
-      animation: mw-coffee-ring 2s var(--ease-out) infinite;
-    }
-    .mw-coffee::after {
-      animation-delay: 1s;
     }
     .mw-coffee:hover {
       transform: translateY(-3px) scale(1.05);
       box-shadow: 0 16px 38px rgba(229, 54, 21, 0.5);
       filter: brightness(1.05);
-      animation-play-state: paused;
-    }
-    .mw-coffee:hover::before,
-    .mw-coffee:hover::after {
       animation-play-state: paused;
     }
     .mw-coffee:active { transform: translateY(-1px) scale(1.02); }
@@ -192,12 +172,6 @@
       0%, 100% { transform: rotate(-6deg); }
       50% { transform: rotate(6deg); }
     }
-    /* ondas que se expandem do botão */
-    @keyframes mw-coffee-ring {
-      0% { transform: scale(1); opacity: 0.55; }
-      80% { opacity: 0; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
     @media (max-width: 540px) {
       .mw-coffee {
         bottom: 16px;
@@ -208,8 +182,6 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .mw-coffee,
-      .mw-coffee::before,
-      .mw-coffee::after,
       .mw-coffee svg { animation: none; }
     }
   </style>
