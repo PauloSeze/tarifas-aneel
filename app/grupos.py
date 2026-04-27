@@ -7,21 +7,15 @@ Replica fielmente o GROUP_MAP do workflow n8n `Tarifas Energia`.
 from typing import Literal, TypedDict
 
 
-# Concessionárias Energisa atendidas (sigla = SigAgente do dataset ANEEL).
-# UF é só pro display; a sigla é o que vai pro filtro da API.
+# Concessionárias atendidas. A chave é o `SigAgente` exato do dataset ANEEL
+# (datastore_search filtra por igualdade — atenção a espaços, ex. "EQUATORIAL PA").
+# UF e nome são só pro display.
 DISTRIBUIDORAS: dict[str, dict[str, str]] = {
     "EMT": {"nome": "Energisa Mato Grosso", "uf": "MT"},
     "EMS": {"nome": "Energisa Mato Grosso do Sul", "uf": "MS"},
     "ETO": {"nome": "Energisa Tocantins", "uf": "TO"},
     "ERO": {"nome": "Energisa Rondônia", "uf": "RO"},
-    "EAC": {"nome": "Energisa Acre", "uf": "AC"},
-    "EPB": {"nome": "Energisa Paraíba", "uf": "PB"},
-    "EBO": {"nome": "Energisa Borborema", "uf": "PB"},
-    "ESE": {"nome": "Energisa Sergipe", "uf": "SE"},
-    "ENF": {"nome": "Energisa Nova Friburgo", "uf": "RJ"},
-    "EMR": {"nome": "Energisa Minas Rio", "uf": "MG"},
-    "EMG": {"nome": "Energisa Minas Gerais", "uf": "MG"},
-    "ESS": {"nome": "Energisa Sul-Sudeste", "uf": "SP/PR"},
+    "EQUATORIAL PA": {"nome": "Equatorial Pará", "uf": "PA"},
 }
 
 GrupoNome = Literal[
