@@ -69,6 +69,7 @@ async def consultar(
         tarifa_records, fio_b_records = await aneel.buscar_tudo(tarifa_filters, fio_b_filters)
     except aneel.AneelError as exc:
         raise HTTPException(502, f"ANEEL indisponível: {exc}") from exc
+    # ano não vem do form V1 — usa ano corrente automaticamente
 
     tributos = Tributos(pis=pis_pct / 100, cofins=cofins_pct / 100, icms=icms_pct / 100)
     resultado = montar_resultado(

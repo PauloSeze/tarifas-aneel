@@ -60,7 +60,9 @@ async def consultar_tarifas(
             tarifa_filters.extend(construir_filtros_tarifa(g, distribuidora))
 
     try:
-        tarifa_records, fio_b_records = await aneel.buscar_tudo(tarifa_filters, fio_b_filters)
+        tarifa_records, fio_b_records = await aneel.buscar_tudo(
+            tarifa_filters, fio_b_filters, ano=ano
+        )
     except aneel.AneelError as exc:
         raise HTTPException(502, f"ANEEL indisponível: {exc}") from exc
 
