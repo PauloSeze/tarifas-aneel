@@ -4,129 +4,200 @@
 
 {% block extra_head %}
 <style>
-  form { display: grid; gap: 20px; }
-  fieldset {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 16px 20px;
+  .mw-hero { margin-bottom: var(--space-8); }
+  .mw-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-tight);
+    color: var(--fg);
+    margin: 0 0 var(--space-3) 0;
+  }
+  .mw-hero p {
+    font-family: var(--font-body);
+    color: var(--fg-muted);
+    max-width: 640px;
+    margin: 0;
+    line-height: var(--lh-normal);
+  }
+  .mw-hero strong {
+    background: var(--mw-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+  }
+
+  .mw-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
+  }
+
+  form { display: grid; gap: var(--space-6); }
+
+  .mw-section { display: grid; gap: var(--space-3); }
+  .mw-section__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
     margin: 0;
   }
-  legend {
-    font-weight: 600;
-    color: #2d3748;
-    font-size: 13px;
-    padding: 0 6px;
+
+  .mw-grid-checks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-2);
   }
-  label { display: block; margin-bottom: 6px; font-size: 13px; color: #4a5568; }
-  input[type="text"], input[type="number"], select {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    background: #fff;
-  }
-  input:focus, select:focus { outline: 2px solid #3182ce; outline-offset: -1px; }
-  .checkboxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
-  .check {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px;
-    cursor: pointer; transition: border-color .15s, background .15s;
-  }
-  .check:hover { border-color: #90cdf4; background: #ebf8ff; }
-  .check input { accent-color: #3182ce; }
-  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .help { font-size: 12px; color: #718096; margin-top: 4px; }
-  button {
-    padding: 12px 24px;
-    background: #1a365d;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
+  .mw-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
     cursor: pointer;
-    width: 100%;
+    background: var(--bg-raised);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--fg);
+    transition: border-color var(--dur-fast), background var(--dur-fast);
   }
-  button:hover { background: #2c5282; }
-  .footer-note {
-    font-size: 12px;
-    color: #718096;
-    text-align: center;
-    margin-top: 16px;
+  .mw-check:hover {
+    border-color: var(--mw-orange-300);
+    background: var(--mw-orange-50);
+  }
+  .mw-check input { accent-color: var(--mw-orange-500); }
+  .mw-check input:checked + span { font-weight: 600; }
+
+  .mw-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+  @media (max-width: 540px) { .mw-row { grid-template-columns: 1fr; } }
+
+  .mw-input,
+  .mw-select {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    padding: 11px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background: var(--bg-raised);
+    color: var(--fg);
+    width: 100%;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+  }
+  .mw-input:focus,
+  .mw-select:focus {
+    outline: none;
+    border-color: var(--mw-orange-500);
+    box-shadow: 0 0 0 3px var(--mw-orange-100);
+  }
+
+  .mw-field__label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    margin-bottom: var(--space-1);
+    display: block;
+  }
+  .mw-field__hint {
+    font-size: var(--text-xs);
+    color: var(--fg-subtle);
+    margin: 4px 0 0 0;
+  }
+
+  .mw-btn--full {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 26px;
+    font-size: var(--text-base);
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="card">
+<section class="mw-hero">
+  <h1>Tarifas reais da <strong>ANEEL</strong> com tributos aplicados</h1>
+  <p>Consulta direta dos dados abertos da ANEEL com brutalização tributária. PIS, COFINS e ICMS editáveis por consulta — defaults vêm da última fatura Energisa Mato Grosso processada.</p>
+</section>
+
+<div class="mw-card">
   <form method="post" action="/consultar">
 
-    <fieldset>
-      <legend>Distribuidora</legend>
-      <select name="distribuidora">
-        <option value="EMT" selected>Energisa Mato Grosso (EMT)</option>
+    <div class="mw-section">
+      <h2 class="mw-section__title">Distribuidora</h2>
+      <select class="mw-select" name="distribuidora">
+        {% for sigla, info in distribuidoras.items() %}
+          <option value="{{ sigla }}" {% if sigla == "EMT" %}selected{% endif %}>
+            {{ info.nome }} ({{ sigla }} · {{ info.uf }})
+          </option>
+        {% endfor %}
       </select>
-      <p class="help">V1 atende apenas EMT. Outras distribuidoras virão em V2.</p>
-    </fieldset>
+    </div>
 
-    <fieldset>
-      <legend>Grupos e modalidades</legend>
-      <div class="checkboxes">
-        <label class="check">
+    <div class="mw-section">
+      <h2 class="mw-section__title">Grupos e modalidades</h2>
+      <div class="mw-grid-checks">
+        <label class="mw-check">
           <input type="checkbox" name="grupos" value="B-Convencional" checked>
-          B — Convencional
+          <span>B — Convencional</span>
         </label>
-        <label class="check">
+        <label class="mw-check">
           <input type="checkbox" name="grupos" value="A4-Azul">
-          A4 — Azul
+          <span>A4 — Azul</span>
         </label>
-        <label class="check">
+        <label class="mw-check">
           <input type="checkbox" name="grupos" value="A4-Verde">
-          A4 — Verde
+          <span>A4 — Verde</span>
         </label>
-        <label class="check">
+        <label class="mw-check">
           <input type="checkbox" name="grupos" value="A4-Geracao">
-          A4 — Geração
+          <span>A4 — Geração</span>
         </label>
-        <label class="check">
+        <label class="mw-check">
           <input type="checkbox" name="grupos" value="FioB" checked>
-          Fio B
+          <span>Fio B</span>
         </label>
       </div>
-    </fieldset>
+    </div>
 
-    <fieldset>
-      <legend>Tributos (% sobre tarifa)</legend>
-      <div class="row">
+    <div class="mw-section">
+      <h2 class="mw-section__title">Tributos (% sobre tarifa)</h2>
+      <div class="mw-row">
         <div>
-          <label for="pis">PIS</label>
-          <input type="number" step="0.0001" name="pis_pct" id="pis"
+          <label class="mw-field__label" for="pis">PIS</label>
+          <input class="mw-input" type="number" step="0.0001" name="pis_pct" id="pis"
                  value="{{ '%.4f'|format(pis_default * 100) }}">
-          <p class="help">Default: última fatura EMT</p>
+          <p class="mw-field__hint">Última fatura Energisa MT</p>
         </div>
         <div>
-          <label for="cofins">COFINS</label>
-          <input type="number" step="0.0001" name="cofins_pct" id="cofins"
+          <label class="mw-field__label" for="cofins">COFINS</label>
+          <input class="mw-input" type="number" step="0.0001" name="cofins_pct" id="cofins"
                  value="{{ '%.4f'|format(cofins_default * 100) }}">
-          <p class="help">Default: última fatura EMT</p>
+          <p class="mw-field__hint">Última fatura Energisa MT</p>
         </div>
         <div>
-          <label for="icms">ICMS</label>
-          <input type="number" step="0.01" name="icms_pct" id="icms"
+          <label class="mw-field__label" for="icms">ICMS</label>
+          <input class="mw-input" type="number" step="0.01" name="icms_pct" id="icms"
                  value="{{ '%.2f'|format(icms_default * 100) }}">
-          <p class="help">MT = 17%</p>
+          <p class="mw-field__hint">Mato Grosso = 17%</p>
         </div>
       </div>
-    </fieldset>
+    </div>
 
-    <button type="submit">Consultar tarifas</button>
+    <button class="mw-btn mw-btn--primary mw-btn--full" type="submit">
+      Consultar tarifas →
+    </button>
   </form>
-
-  <p class="footer-note">
-    Fonte: <a href="https://dadosabertos.aneel.gov.br" target="_blank" rel="noopener">ANEEL Dados Abertos</a>
-    · API JSON: <code>/api/tarifas</code>
-  </p>
 </div>
 {% endblock %}

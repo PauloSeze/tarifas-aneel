@@ -13,6 +13,7 @@ from fastapi.templating import Jinja2Templates
 from app import aneel
 from app.calculos import formatar_br, montar_resultado
 from app.grupos import (
+    DISTRIBUIDORAS,
     construir_filtros_fio_b,
     construir_filtros_tarifa,
     normalizar_grupo,
@@ -32,6 +33,7 @@ async def form(request: Request) -> HTMLResponse:
         "form.html",
         {
             "request": request,
+            "distribuidoras": DISTRIBUIDORAS,
             "pis_default": PIS_DEFAULT,
             "cofins_default": COFINS_DEFAULT,
             "icms_default": ICMS_DEFAULT,

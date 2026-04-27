@@ -3,55 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Tarifas ANEEL{% endblock %}</title>
+  <title>{% block title %}Tarifas ANEEL — Midwest Energias{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="stylesheet" href="/static/colors-and-type.css">
+  <link rel="stylesheet" href="/static/components.css">
   <style>
-    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f1f5f9;
-      color: #1a202c;
-      font-size: 14px;
+      background: var(--bg-subtle);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    .page {
-      max-width: 880px;
+
+    .mw-page {
+      flex: 1;
+      max-width: var(--container-lg);
+      width: 100%;
       margin: 0 auto;
-      padding: 24px 16px 48px;
+      padding: var(--space-8) var(--space-6) var(--space-12);
     }
-    .topbar {
+
+    .mw-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border);
     }
-    .topbar h1 {
-      margin: 0;
-      font-size: 18px;
-      color: #1a365d;
-    }
-    .topbar a {
-      color: #3182ce;
+
+    .mw-topbar__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
       text-decoration: none;
-      font-size: 13px;
     }
-    .topbar a:hover { text-decoration: underline; }
-    .card {
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 24px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+
+    .mw-topbar__brand img {
+      height: 36px;
+    }
+
+    .mw-topbar__title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--text-base);
+      color: var(--fg-muted);
+      padding-left: var(--space-3);
+      border-left: 1px solid var(--border-strong);
+    }
+
+    .mw-topbar__nav a {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: var(--text-sm);
+      color: var(--fg-muted);
+      transition: color var(--dur-fast);
+    }
+    .mw-topbar__nav a:hover { color: var(--fg-brand); }
+
+    .mw-footer {
+      margin-top: auto;
+      background: var(--mw-dark);
+      color: var(--mw-ink-300);
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .mw-footer__inner {
+      max-width: var(--container-lg);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      align-items: center;
+      text-align: center;
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+    }
+
+    .mw-footer__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .mw-footer__brand img { height: 28px; }
+    .mw-footer__brand span {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .mw-footer__credit {
+      color: var(--mw-ink-400);
+      font-size: var(--text-xs);
+    }
+    .mw-footer__credit a {
+      color: var(--mw-orange-300);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color var(--dur-fast);
+    }
+    .mw-footer__credit a:hover {
+      color: var(--mw-orange-500);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .mw-footer__source {
+      color: var(--mw-ink-500);
+      font-size: var(--text-xs);
+    }
+    .mw-footer__source a {
+      color: var(--mw-ink-300);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .mw-topbar { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+      .mw-topbar__title { border-left: 0; padding-left: 0; }
     }
   </style>
   {% block extra_head %}{% endblock %}
 </head>
-<body>
-  <div class="page">
-    <div class="topbar">
-      <h1>Tarifas ANEEL</h1>
-      <a href="/">↻ Nova consulta</a>
-    </div>
+<body class="mw-typography">
+  <div class="mw-page">
+    <header class="mw-topbar">
+      <a class="mw-topbar__brand" href="/">
+        <img src="/static/logo.svg" alt="Midwest Energias" />
+        <span class="mw-topbar__title">Tarifas ANEEL</span>
+      </a>
+      <nav class="mw-topbar__nav">
+        <a href="/">Nova consulta</a>
+      </nav>
+    </header>
+
     {% block content %}{% endblock %}
   </div>
+
+  <footer class="mw-footer">
+    <div class="mw-footer__inner">
+      <div class="mw-footer__brand">
+        <img src="/static/logo-mark-white.svg" alt="Midwest" />
+        <span>Midwest Energias</span>
+      </div>
+      <p class="mw-footer__source">
+        Dados: <a href="https://dadosabertos.aneel.gov.br" target="_blank" rel="noopener">ANEEL Dados Abertos</a>
+        · API JSON em <code>/api/tarifas</code>
+      </p>
+      <p class="mw-footer__credit">
+        Criado por
+        <a href="https://instagram.com/pauloseze" target="_blank" rel="noopener">@pauloseze</a>
+      </p>
+    </div>
+  </footer>
 </body>
 </html>

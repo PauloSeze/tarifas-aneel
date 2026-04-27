@@ -4,106 +4,187 @@
 
 {% block extra_head %}
 <style>
-  .result-header {
-    background: #1a365d;
+  .mw-result-header {
+    background: var(--mw-gradient);
     color: #fff;
-    padding: 20px 24px;
-    border-radius: 10px 10px 0 0;
+    padding: var(--space-8);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-glow-orange);
   }
-  .result-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 600; }
-  .result-header .sub { font-size: 12px; opacity: 0.85; }
-  .result-body {
-    background: #fff;
-    border: 1px solid #e2e8f0;
+  .mw-result-header h1 {
+    margin: 0 0 var(--space-2) 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-2xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-tight);
+  }
+  .mw-result-header p {
+    margin: 0;
+    opacity: 0.92;
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+  }
+
+  .mw-result-body {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
     border-top: none;
-    border-radius: 0 0 10px 10px;
-    padding: 24px;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
   }
-  .grupo { margin-bottom: 28px; }
-  .grupo:last-child { margin-bottom: 0; }
-  .grupo-title {
-    font-size: 16px;
+
+  .mw-grupo { margin-bottom: var(--space-8); }
+  .mw-grupo:last-of-type { margin-bottom: 0; }
+
+  .mw-grupo__title {
+    font-family: var(--font-display);
     font-weight: 600;
-    color: #1a365d;
-    margin: 0 0 12px 0;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #e2e8f0;
+    font-size: var(--text-lg);
+    color: var(--fg);
+    margin: 0 0 var(--space-3) 0;
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--mw-orange-100);
   }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid #e2e8f0; }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-3); }
+  th, td {
+    padding: var(--space-3);
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+  }
   th:first-child, td:first-child { text-align: left; }
   th {
-    background: #f7fafc;
+    background: var(--mw-ink-50);
+    font-family: var(--font-display);
     font-weight: 600;
-    color: #4a5568;
-    font-size: 12px;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: var(--ls-wider);
   }
-  tr:hover td { background: #f7fafc; }
-  .valor { font-family: 'SF Mono', Consolas, monospace; font-size: 13px; }
-  .relacao-te {
-    background: #f0f4f8;
-    border-left: 3px solid #3182ce;
-    padding: 10px 14px;
-    margin-top: 8px;
-    border-radius: 0 6px 6px 0;
-    font-size: 13px;
+  tr:hover td { background: var(--mw-orange-50); }
+
+  .mw-valor {
+    font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+    font-size: var(--text-sm);
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
   }
-  .relacao-te strong { color: #2b6cb0; }
-  .fiob-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
-  .fiob-base { font-size: 13px; color: #4a5568; margin-bottom: 12px; }
-  .fiob-grid {
+
+  .mw-relacao {
+    background: var(--mw-orange-50);
+    border-left: 3px solid var(--mw-orange-500);
+    padding: var(--space-3) var(--space-4);
+    margin-top: var(--space-2);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    color: var(--fg);
+  }
+  .mw-relacao strong { color: var(--mw-red-500); font-weight: 700; }
+
+  .mw-fiob {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+  }
+  .mw-fiob__base {
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    color: var(--fg-muted);
+    margin-bottom: var(--space-4);
+  }
+  .mw-fiob__base strong {
+    font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+    color: var(--fg);
+  }
+  .mw-fiob__reh {
+    color: var(--fg-subtle);
+    font-size: var(--text-xs);
+    margin-top: var(--space-1);
+  }
+  .mw-fiob__grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 12px;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
   }
-  .fiob-card {
-    background: #f7fafc;
-    border-radius: 6px;
-    padding: 10px 8px;
+  .mw-fiob__card {
+    background: var(--mw-ink-50);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-2);
     text-align: center;
-    border: 1px solid transparent;
+    transition: transform var(--dur-fast);
   }
-  .fiob-card.atual {
-    background: #ebf8ff;
-    border-color: #3182ce;
+  .mw-fiob__card.atual {
+    background: var(--mw-orange-50);
+    border-color: var(--mw-orange-500);
+    box-shadow: var(--shadow-glow-orange);
+    transform: scale(1.04);
   }
-  .fiob-ano { font-size: 12px; color: #718096; }
-  .fiob-percent { font-size: 11px; color: #a0aec0; }
-  .fiob-valor {
-    font-family: 'SF Mono', Consolas, monospace;
-    font-size: 12px;
+  .mw-fiob__ano {
+    font-family: var(--font-display);
     font-weight: 600;
-    color: #2d3748;
-    margin-top: 4px;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
   }
-  .fiob-card.atual .fiob-valor { color: #2b6cb0; }
-  .footer {
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #e2e8f0;
+  .mw-fiob__pct {
     font-size: 11px;
-    color: #718096;
+    color: var(--fg-subtle);
+    margin-top: 2px;
   }
-  .footer a { color: #3182ce; text-decoration: none; }
+  .mw-fiob__valor {
+    font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    margin-top: var(--space-1);
+  }
+  .mw-fiob__card.atual .mw-fiob__valor { color: var(--mw-red-500); }
+
+  .mw-tributos {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--fg-subtle);
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .mw-tributos strong {
+    color: var(--fg-muted);
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin-right: var(--space-1);
+  }
+
   @media (max-width: 640px) {
-    .fiob-grid { grid-template-columns: repeat(3, 1fr); }
+    .mw-fiob__grid { grid-template-columns: repeat(3, 1fr); }
+    .mw-result-body { padding: var(--space-5); }
+    .mw-result-header { padding: var(--space-5); }
+    table { font-size: var(--text-xs); }
+    th, td { padding: var(--space-2); }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="result-header">
-  <h2>Tarifas {{ resultado.distribuidora }}{% if resultado.ano_vigencia %} · {{ resultado.ano_vigencia }}{% endif %}</h2>
-  <div class="sub">
+<header class="mw-result-header">
+  <h1>{{ resultado.distribuidora }}{% if resultado.ano_vigencia %} · {{ resultado.ano_vigencia }}{% endif %}</h1>
+  <p>
     {% if resultado.resolucao_tarifas %}{{ resultado.resolucao_tarifas }} · {% endif %}
     Consulta em {{ resultado.consultado_em }}
-  </div>
-</div>
+  </p>
+</header>
 
-<div class="result-body">
+<section class="mw-result-body">
 
   {% for nome, items in resultado.grupos.items() %}
     {% set is_b1 = nome.startswith("B1") %}
@@ -111,8 +192,8 @@
     {% set demandas = items | selectattr('tipo', 'equalto', 'Demanda') | list %}
     {% set consumos = items | selectattr('tipo', 'equalto', 'Consumo') | list %}
 
-    <div class="grupo">
-      <h3 class="grupo-title">{{ nome }}</h3>
+    <div class="mw-grupo">
+      <h2 class="mw-grupo__title">{{ nome }}</h2>
 
       {% if is_b1 %}
         <table>
@@ -123,7 +204,7 @@
             {% for item in consumos %}
               <tr>
                 <td>{% if item.posto == "Não se aplica" %}Consumo{% else %}Consumo {{ item.posto }}{% endif %}</td>
-                <td class="valor">{{ item.valor_kwh | br }}</td>
+                <td class="mw-valor">{{ item.valor_kwh | br }}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -136,7 +217,7 @@
               <tr>
                 <th>Demanda</th>
                 <th>Ultrapassagem</th>
-                <th>Não Consumida</th>
+                <th>Não consumida</th>
                 <th>R$/kW</th>
               </tr>
             </thead>
@@ -144,9 +225,9 @@
               {% for item in demandas %}
                 <tr>
                   <td>{{ item.posto }}</td>
-                  <td class="valor">{{ (item.valor_kwh * 2) | br }}</td>
-                  <td class="valor">{{ item.valor_sem_icms | br }}</td>
-                  <td class="valor">{{ item.valor_kwh | br }}</td>
+                  <td class="mw-valor">{{ (item.valor_kwh * 2) | br }}</td>
+                  <td class="mw-valor">{{ item.valor_sem_icms | br }}</td>
+                  <td class="mw-valor">{{ item.valor_kwh | br }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -167,9 +248,9 @@
               {% for item in consumos %}
                 <tr>
                   <td>{% if item.posto == "Não se aplica" %}Único{% elif item.posto == "Fora ponta" %}Fora Ponta{% else %}{{ item.posto }}{% endif %}</td>
-                  <td class="valor">{{ item.tusd | br }}</td>
-                  <td class="valor">{{ item.te | br }}</td>
-                  <td class="valor">{{ item.valor_kwh | br }}</td>
+                  <td class="mw-valor">{{ item.tusd | br }}</td>
+                  <td class="mw-valor">{{ item.te | br }}</td>
+                  <td class="mw-valor">{{ item.valor_kwh | br }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -178,20 +259,19 @@
           {% set ponta = consumos | selectattr('posto_original', 'equalto', 'Ponta') | first %}
           {% set fora = consumos | selectattr('posto_original', 'equalto', 'Fora ponta') | first %}
           {% if ponta and fora and fora.te > 0 %}
-            <div class="relacao-te">
-              Relação TE: Ponta é <strong>{{ '%.2f'|format(ponta.te / fora.te) }}x</strong> maior que Fora Ponta
+            <div class="mw-relacao">
+              Relação TE: Ponta é <strong>{{ '%.2f'|format(ponta.te / fora.te) }}×</strong> maior que Fora Ponta
             </div>
           {% endif %}
         {% endif %}
 
       {% else %}
-        {# A4 - Geração e fallback #}
         <table>
           <thead>
             <tr>
               <th>Descrição</th>
               <th>Ultrapassagem</th>
-              <th>Não Consumida</th>
+              <th>Não consumida</th>
               <th>R$/kW</th>
             </tr>
           </thead>
@@ -199,15 +279,15 @@
             {% for item in demandas %}
               <tr>
                 <td>{{ item.posto }}</td>
-                <td class="valor">{{ (item.valor_kwh * 2) | br }}</td>
-                <td class="valor">{{ item.valor_sem_icms | br }}</td>
-                <td class="valor">{{ item.valor_kwh | br }}</td>
+                <td class="mw-valor">{{ (item.valor_kwh * 2) | br }}</td>
+                <td class="mw-valor">{{ item.valor_sem_icms | br }}</td>
+                <td class="mw-valor">{{ item.valor_kwh | br }}</td>
               </tr>
             {% endfor %}
             {% for item in consumos %}
               <tr>
                 <td>{% if item.posto == "Não se aplica" %}Consumo{% else %}Consumo {{ item.posto }}{% endif %}</td>
-                <td colspan="3" class="valor">{{ item.valor_kwh | br }}</td>
+                <td colspan="3" class="mw-valor">{{ item.valor_kwh | br }}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -217,30 +297,30 @@
   {% endfor %}
 
   {% if resultado.fio_b_base_kwh is not none %}
-    <div class="fiob-section">
-      <h3 class="grupo-title">Fio B — B1 Convencional</h3>
-      <div class="fiob-base">
+    <div class="mw-fiob">
+      <h2 class="mw-grupo__title">Fio B — B1 Convencional</h2>
+      <div class="mw-fiob__base">
         Tarifa cheia: <strong>{{ resultado.fio_b_base_kwh | br }}</strong> R$/kWh (sem tributos)
-        {% if resultado.fio_b_resolucao %}<br><span style="color:#a0aec0;">{{ resultado.fio_b_resolucao }}</span>{% endif %}
+        {% if resultado.fio_b_resolucao %}
+          <div class="mw-fiob__reh">{{ resultado.fio_b_resolucao }}</div>
+        {% endif %}
       </div>
-      <div class="fiob-grid">
+      <div class="mw-fiob__grid">
         {% for c in resultado.fio_b_anos %}
-          <div class="fiob-card{% if c.atual %} atual{% endif %}">
-            <div class="fiob-ano">{{ c.ano }}</div>
-            <div class="fiob-percent">{{ '%.0f'|format(c.percentual * 100) }}%</div>
-            <div class="fiob-valor">{{ c.valor_kwh | br }}</div>
+          <div class="mw-fiob__card{% if c.atual %} atual{% endif %}">
+            <div class="mw-fiob__ano">{{ c.ano }}</div>
+            <div class="mw-fiob__pct">{{ '%.0f'|format(c.percentual * 100) }}%</div>
+            <div class="mw-fiob__valor">{{ c.valor_kwh | br }}</div>
           </div>
         {% endfor %}
       </div>
     </div>
   {% endif %}
 
-  <div class="footer">
-    Tributos aplicados:
-    PIS {{ '%.4f'|format(tributos.pis * 100) }}% ·
-    COFINS {{ '%.4f'|format(tributos.cofins * 100) }}% ·
-    ICMS {{ '%.2f'|format(tributos.icms * 100) }}%
-    · Fonte: <a href="https://dadosabertos.aneel.gov.br" target="_blank" rel="noopener">ANEEL</a>
+  <div class="mw-tributos">
+    <span><strong>PIS</strong>{{ '%.4f'|format(tributos.pis * 100) }}%</span>
+    <span><strong>COFINS</strong>{{ '%.4f'|format(tributos.cofins * 100) }}%</span>
+    <span><strong>ICMS</strong>{{ '%.2f'|format(tributos.icms * 100) }}%</span>
   </div>
-</div>
+</section>
 {% endblock %}
